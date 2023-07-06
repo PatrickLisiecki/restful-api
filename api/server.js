@@ -4,12 +4,12 @@ const port = 7777;
 
 const { v4: uuidv4 } = require("uuid");
 
+app.use(express.json());
+
 app.use((req, res, next) => {
     console.log(`Request: ${req.method} ${req.originalUrl}`);
     next();
 });
-
-app.use(express.json());
 
 app.get("/", (req, res) => {
     res.send("Welcome to my RESTful API");
@@ -52,10 +52,10 @@ app.post("/fruits", (req, res) => {
         id: shortenedId,
         ...req.body,
     };
-    
+
     console.log("New Fruit:", newFruit);
     fruits.push(newFruit);
-    res.send(newFruit);
+    res.status(204).send(newFruit);
 });
 
 app.patch("/fruits/:fruitId", (req, res) => {
@@ -67,7 +67,7 @@ app.patch("/fruits/:fruitId", (req, res) => {
     const updatedFruit = { ...fruits[targetIndex], ...updates };
 
     fruits[targetIndex] = updatedFruit;
-    res.send(updatedFruit);
+    res.status(204).send(updatedFruit);
 });
 
 app.delete("/fruits/:fruitId", (req, res) => {
@@ -77,7 +77,7 @@ app.delete("/fruits/:fruitId", (req, res) => {
 
     fruits.splice(targetIndex, 1);
 
-    res.send({ message: "Delete was successful." });
+    res.status(204).send({ message: "Delete was successful." });
 });
 
 const fruits = [
